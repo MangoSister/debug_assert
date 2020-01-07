@@ -351,8 +351,12 @@ namespace detail
 /// This should not be necessary, the regular version is optimized away
 /// completely.
 #    define DEBUG_UNREACHABLE(...)                                                                 \
-        debug_assert::detail::do_assert(debug_assert::detail::always_false,                        \
-                                        DEBUG_ASSERT_CUR_SOURCE_LOCATION, "", __VA_ARGS__)
+        do                                                                                         \
+        {                                                                                          \
+            debug_assert::detail::do_assert(debug_assert::detail::always_false,                    \
+                                            DEBUG_ASSERT_CUR_SOURCE_LOCATION, "", __VA_ARGS__);    \
+            DEBUG_ASSERT_MARK_UNREACHABLE;                                                         \
+        } while (false);
 #else
 #    define DEBUG_ASSERT(Expr, ...) static_cast<void>(0)
 
